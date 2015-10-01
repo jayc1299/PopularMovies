@@ -1,22 +1,28 @@
 package com.android.test.popularmovies;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.GridView;
 
-public class ActivityMain extends AppCompatActivity {
+public class ActivityMain extends AppCompatActivity implements AsyncGetMoviePosters.IAsyncMovies {
+
+	private String CLASS_TAG = "ActivityMain";
+	GridView mGridview;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		mGridview = (GridView) findViewById(R.id.activity_main_gridview);
+
 		findViewById(R.id.activity_main_button).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				AsyncGetMoviePosters async = new AsyncGetMoviePosters();
+				AsyncGetMoviePosters async = new AsyncGetMoviePosters(ActivityMain.this);
 				async.execute(ActivityMain.this);
 			}
 		});
@@ -42,5 +48,12 @@ public class ActivityMain extends AppCompatActivity {
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onMoviesReceived(PojoMovies movies) {
+		AdapterMovies adapter = new AdapterMovies(ActivityMain.this, R.layout.item_movie, movies.results);
+		mGridview.setAdapter(adapter);
+
 	}
 }

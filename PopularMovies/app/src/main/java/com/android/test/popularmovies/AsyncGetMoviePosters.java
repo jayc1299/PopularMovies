@@ -1,5 +1,6 @@
 package com.android.test.popularmovies;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -11,16 +12,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 
-public class AsyncGetMoviePosters extends AsyncTask<Context, Void, Void> {
+public class AsyncGetMoviePosters extends AsyncTask<Context, Void, PojoMovies> {
 
+	public interface IAsyncMovies{
+		void onMoviesReceived(PojoMovies movies);
+	}
+
+	private IAsyncMovies mListener;
 	private String CLASS_TAG = "AsyncGetMoviePosters";
 
+	public AsyncGetMoviePosters(Activity activity){
+		mListener = (IAsyncMovies) activity;
+	}
+
 	@Override
-	protected Void doInBackground(Context... params) {
+	protected PojoMovies doInBackground(Context... params) {
 		InputStream is = null;
 		Context context = params[0];
 		MovieApi api = new MovieApi();
@@ -47,14 +55,10 @@ public class AsyncGetMoviePosters extends AsyncTask<Context, Void, Void> {
 			Gson gson = new Gson();
 			PojoMovies movies = gson.fromJson(contentAsString, PojoMovies.class);
 
-			return null;
+			return movies;
 
 			// Makes sure that the InputStream is closed after the app is
 			// finished using it.
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (ProtocolException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -68,6 +72,15 @@ public class AsyncGetMoviePosters extends AsyncTask<Context, Void, Void> {
 		}
 
 		return null;
+	}
+
+	@Override
+	protected void onPostExecute(PojoMovies movies) {
+		super.onPostExecute(movies);
+
+		if(mListener != null){
+			mListener.onMoviesReceived(movies);
+		}
 	}
 
 	public String readIt(InputStream stream) throws IOException{

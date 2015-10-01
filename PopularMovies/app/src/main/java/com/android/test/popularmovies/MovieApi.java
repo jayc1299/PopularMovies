@@ -13,4 +13,8 @@ public class MovieApi {
 	public String getApiUrl(Context context){
 		return context.getString(R.string.apiurl, getApiKey(context));
 	}
+
+	public String getImgUrl(Context context, String imgPath){
+		return context.getString(R.string.imgurl, imgPath, getApiKey(context));
+	}
 }

@@ -5,5 +5,4 @@
 .DS_Store
 /build
 /captures
-/app/moviedb.properties
-moviedb.properties
+/app/src/main/res/values/movieapi.xml

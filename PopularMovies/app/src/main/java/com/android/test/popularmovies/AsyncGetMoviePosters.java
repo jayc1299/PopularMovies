@@ -3,6 +3,7 @@ package com.android.test.popularmovies;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -16,6 +17,8 @@ import java.net.URL;
 
 public class AsyncGetMoviePosters extends AsyncTask<Context, Void, PojoMovies> {
 
+	private final int mTimeout = 15000;
+
 	public interface IAsyncMovies{
 		void onMoviesReceived(PojoMovies movies);
 	}
@@ -25,6 +28,11 @@ public class AsyncGetMoviePosters extends AsyncTask<Context, Void, PojoMovies> {
 
 	public AsyncGetMoviePosters(Activity activity){
 		mListener = (IAsyncMovies) activity;
+	}
+
+
+	public AsyncGetMoviePosters(Fragment fragment){
+		mListener = (IAsyncMovies) fragment;
 	}
 
 	@Override
@@ -39,11 +47,10 @@ public class AsyncGetMoviePosters extends AsyncTask<Context, Void, PojoMovies> {
 		try {
 			URL url = new URL(myUrl);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setReadTimeout(10000 /* milliseconds */);
-			conn.setConnectTimeout(15000 /* milliseconds */);
+			conn.setReadTimeout(mTimeout);
+			conn.setConnectTimeout(mTimeout);
 			conn.setRequestMethod("GET");
 			conn.setDoInput(true);
-			// Starts the query
 			conn.connect();
 			int response = conn.getResponseCode();
 			Log.d(CLASS_TAG, "The response is: " + response);

@@ -1,5 +1,6 @@
 package com.android.test.popularmovies.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +36,7 @@ public class ActivityMain extends AppCompatActivity {
 		int id = item.getItemId();
 
 		if (id == R.id.action_settings) {
+			startActivity(new Intent(ActivityMain.this, ActivitySettings.class));
 			return true;
 		}
 

@@ -6,16 +6,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.android.test.popularmovies.AsyncGetMoviePosters;
-import com.android.test.popularmovies.PojoMovies;
+import com.android.test.popularmovies.Async.AsyncGetMoviePosters;
+import com.android.test.popularmovies.Async.PojoMovies;
 import com.android.test.popularmovies.R;
+import com.android.test.popularmovies.Utils;
 import com.android.test.popularmovies.activities.ActivityDetail;
 import com.android.test.popularmovies.adapters.AdapterMovies;
 
@@ -55,22 +55,25 @@ public class FragmentMain extends Fragment implements AsyncGetMoviePosters.IAsyn
 					}else{
 						startActivity(intent);
 					}
-
-
 				}
 			}
 		});
 	}
 
+	/**
+	 * Get movies from web. This method is public as it may be refreshed from activity.
+	 */
 	public void getMovies(){
-		Log.d("hello", "Refresh movies");
 		AsyncGetMoviePosters async = new AsyncGetMoviePosters(this);
 		async.execute(getActivity());
 	}
 
 	@Override
 	public void onMoviesReceived(PojoMovies movies) {
-		mAdapter = new AdapterMovies(getActivity(), R.layout.item_movie, movies.results);
+		if(movies != null) {
+			mAdapter = new AdapterMovies(getActivity(), R.layout.item_movie, movies.results);
+		}
+		mGridview.setEmptyView(getView().findViewById(R.id.fragment_main_no_results));
 		mGridview.setAdapter(mAdapter);
 	}
 }

@@ -1,4 +1,4 @@
-package com.android.test.popularmovies;
+package com.android.test.popularmovies.Async;
 
 import android.os.Parcel;
 import android.os.Parcelable;

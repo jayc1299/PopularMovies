@@ -1,4 +1,4 @@
-package com.android.test.popularmovies;
+package com.android.test.popularmovies.Async;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
+import com.android.test.popularmovies.MovieApi;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -30,7 +31,6 @@ public class AsyncGetMoviePosters extends AsyncTask<Context, Void, PojoMovies> {
 		mListener = (IAsyncMovies) activity;
 	}
 
-
 	public AsyncGetMoviePosters(Fragment fragment){
 		mListener = (IAsyncMovies) fragment;
 	}
@@ -39,13 +39,12 @@ public class AsyncGetMoviePosters extends AsyncTask<Context, Void, PojoMovies> {
 	protected PojoMovies doInBackground(Context... params) {
 		InputStream is = null;
 		Context context = params[0];
-		MovieApi api = new MovieApi();
-
-		String myUrl = api.getApiUrl(context);
-		Log.d(CLASS_TAG, "myUrl:" + myUrl);
+		MovieApi api = new MovieApi(context);
 
 		try {
-			URL url = new URL(myUrl);
+			URL url = api.getMoviesUrl();
+			Log.d(CLASS_TAG, "myUrl:" + url.toString());
+
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setReadTimeout(mTimeout);
 			conn.setConnectTimeout(mTimeout);

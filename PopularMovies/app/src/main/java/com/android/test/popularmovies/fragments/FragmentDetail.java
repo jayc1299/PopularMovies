@@ -1,6 +1,5 @@
 package com.android.test.popularmovies.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +14,7 @@ import android.widget.TextView;
 
 import com.android.test.popularmovies.MovieApi;
 import com.android.test.popularmovies.R;
-import com.android.test.popularmovies.Result;
+import com.android.test.popularmovies.Async.Result;
 import com.android.test.popularmovies.activities.ActivityDetail;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -23,7 +22,7 @@ import com.squareup.picasso.Picasso;
 public class FragmentDetail extends Fragment{
 
 	Result mMovie;
-	MovieApi mAPi = new MovieApi();
+	MovieApi mAPi;
 	IFragmentDetailCallback mCallback;
 	ImageView mImage;
 
@@ -48,6 +47,8 @@ public class FragmentDetail extends Fragment{
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
+		mAPi = new MovieApi(getActivity());
+
 		//Get movie passed in from activity
 		Intent intent = getActivity().getIntent();
 		if(intent != null){
@@ -67,7 +68,8 @@ public class FragmentDetail extends Fragment{
 
 			//Set image
 			mImage = (ImageView) getView().findViewById(R.id.fragment_detail_image);
-			String path = mAPi.getImgUrl(getActivity(), mMovie.posterPath, true);
+			String path = mAPi.getImgUrl(mMovie.posterPath, true);
+			//Callback to activity to give go ahead to load.
 			Picasso.with(getActivity()).load(path).into(mImage, new Callback() {
 				@Override
 				public void onSuccess() {

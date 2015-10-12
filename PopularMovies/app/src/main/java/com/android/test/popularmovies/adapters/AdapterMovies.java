@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 import com.android.test.popularmovies.MovieApi;
 import com.android.test.popularmovies.R;
-import com.android.test.popularmovies.Result;
+import com.android.test.popularmovies.Async.Result;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class AdapterMovies extends ArrayAdapter<Result>{
 		mInflater = LayoutInflater.from(context);
 		mMovies = movies;
 		mContext = context;
-		mApi = new MovieApi();
+		mApi = new MovieApi(mContext);
 	}
 
 	@Override
@@ -40,7 +40,8 @@ public class AdapterMovies extends ArrayAdapter<Result>{
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
 
-		String path = mApi.getImgUrl(mContext, mMovies.get(position).posterPath, false);
+		//Get image path and use picasso to load it.
+		String path = mApi.getImgUrl(mMovies.get(position).posterPath, false);
 		Picasso.with(mContext).load(path).into(viewHolder.thumbImage);
 
 		convertView.setTag(viewHolder);

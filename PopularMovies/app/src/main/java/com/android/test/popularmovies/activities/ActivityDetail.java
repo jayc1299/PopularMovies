@@ -20,7 +20,7 @@ public class ActivityDetail extends AppCompatActivity implements FragmentDetail.
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		//Large album artwork is loaded from web. So we need to delay the animation till this is done.
+		//Large artwork is loaded from web. So we need to delay the animation till this is done.
 		//This allowed for a smoother animation using shared element.
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			postponeEnterTransition();
@@ -35,8 +35,7 @@ public class ActivityDetail extends AppCompatActivity implements FragmentDetail.
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case android.R.id.home:
-				//ActivityDetail.this.finish();
-				//return false;
+				//Finish after the transition is done.
 				this.finishAfterTransition();
 				return true;
 		}
@@ -58,6 +57,7 @@ public class ActivityDetail extends AppCompatActivity implements FragmentDetail.
 				});
 	}
 
+	//Callback from fragment.
 	@Override
 	public void onMoviePosterLoaded(View v) {
 		scheduleStartPostponedTransition(v);

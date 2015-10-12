@@ -47,7 +47,7 @@ public class ActivityMain extends AppCompatActivity{
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		//Refresh
+		//Refresh movies when settings page closes.
 		if(!isFinishing() && requestCode == REQUEST_CODE_SETTINGS){
 			FragmentMain fm = (FragmentMain) getSupportFragmentManager().findFragmentByTag(FragmentMain.class.getSimpleName());
 			if(fm != null){

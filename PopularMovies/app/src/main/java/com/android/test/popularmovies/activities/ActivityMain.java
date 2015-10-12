@@ -1,18 +1,20 @@
 package com.android.test.popularmovies.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.android.test.popularmovies.R;
 import com.android.test.popularmovies.fragments.FragmentMain;
 
-public class ActivityMain extends AppCompatActivity {
+public class ActivityMain extends AppCompatActivity{
 
-	private String CLASS_TAG = "ActivityMain";
+	public static final int REQUEST_CODE_SETTINGS = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +38,21 @@ public class ActivityMain extends AppCompatActivity {
 		int id = item.getItemId();
 
 		if (id == R.id.action_settings) {
-			startActivity(new Intent(ActivityMain.this, ActivitySettings.class));
+			startActivityForResult(new Intent(ActivityMain.this, ActivitySettings.class), REQUEST_CODE_SETTINGS);
 			return true;
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		//Refresh
+		if(!isFinishing() && requestCode == REQUEST_CODE_SETTINGS){
+			FragmentMain fm = (FragmentMain) getSupportFragmentManager().findFragmentByTag(FragmentMain.class.getSimpleName());
+			if(fm != null){
+				fm.getMovies();
+			}
+		}
 	}
 }

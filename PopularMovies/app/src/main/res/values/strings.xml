@@ -1,11 +1,15 @@
 <resources>
-	<string name="app_name">PopularMovies</string>
+	<string name="app_name">Popular Movies</string>
 
-	<string name="hello_world">Hello world!</string>
 	<string name="action_settings">Settings</string>
+	<string name="movieTransitionName">movieTransition</string>
 
 	<string name="pref_sort_key">sort_order</string>
 	<string name="pref_sort_label">Sort Order</string>
 	<string name="pref_sort_default">popularity.desc</string>
+
+	<string name="fragment_detail_title">Title</string>
+	<string name="fragment_detail_release_date">Release Date</string>
+	<string name="fragment_detail_rating">Rating</string>
 
 </resources>

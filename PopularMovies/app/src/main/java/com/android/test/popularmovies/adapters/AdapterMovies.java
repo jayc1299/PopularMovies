@@ -31,12 +31,23 @@ public class AdapterMovies extends ArrayAdapter<Result>{
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		convertView = mInflater.inflate(R.layout.item_movie, null, false);
+		ViewHolder viewHolder = new ViewHolder();
 
-		String path = mApi.getImgUrl(mContext, mMovies.get(position).backdropPath);
+		if(convertView == null) {
+			convertView = mInflater.inflate(R.layout.item_movie, null, false);
+			viewHolder.thumbImage = (ImageView) convertView;
+		} else {
+			viewHolder = (ViewHolder) convertView.getTag();
+		}
 
-		Picasso.with(mContext).load(path).into((ImageView) convertView.findViewById(R.id.item_movie_image));
+		String path = mApi.getImgUrl(mContext, mMovies.get(position).posterPath, false);
+		Picasso.with(mContext).load(path).into(viewHolder.thumbImage);
 
+		convertView.setTag(viewHolder);
 		return convertView;
+	}
+
+	public class ViewHolder {
+		ImageView thumbImage;
 	}
 }

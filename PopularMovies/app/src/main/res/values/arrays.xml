@@ -2,7 +2,7 @@
 <resources>
 	<string-array name="pref_sort_values">
 		<item>popularity.desc</item>
-		<item>rated.desc</item>
+		<item>vote_average.desc</item>
 	</string-array>
 
 	<string-array name="pref_sort_entries">

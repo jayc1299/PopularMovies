@@ -1,9 +1,12 @@
 package com.android.test.popularmovies.fragments;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,15 +29,13 @@ public class FragmentMain extends Fragment implements AsyncGetMoviePosters.IAsyn
 		View view = inflater.inflate(R.layout.fragment_main, container, false);
 
 		mGridview = (GridView) view.findViewById(R.id.fragment_main_gridview);
-
 		return view;
 	}
 
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		AsyncGetMoviePosters async = new AsyncGetMoviePosters(this);
-		async.execute(getActivity());
+		getMovies();
 
 		mGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -42,10 +43,29 @@ public class FragmentMain extends Fragment implements AsyncGetMoviePosters.IAsyn
 				if(mAdapter != null && mAdapter.getCount() > 0) {
 					Intent intent = new Intent(getActivity(), ActivityDetail.class);
 					intent.putExtra(ActivityDetail.TAG_MOVIE_OBJECT, mAdapter.getItem(position));
-					startActivity(intent);
+
+					ActivityOptions options = null;
+					// create the transition animation - the images in the layouts of both activities are defined with android:transitionName="MyTransition"
+					if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+						options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), view, getString(R.string.movieTransitionName));
+					}
+					// start the new activity
+					if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && options != null) {
+						getActivity().startActivity(intent, options.toBundle());
+					}else{
+						startActivity(intent);
+					}
+
+
 				}
 			}
 		});
+	}
+
+	public void getMovies(){
+		Log.d("hello", "Refresh movies");
+		AsyncGetMoviePosters async = new AsyncGetMoviePosters(this);
+		async.execute(getActivity());
 	}
 
 	@Override

@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.test.popularmovies.Async.Result;
 import com.android.test.popularmovies.MovieApi;
 import com.android.test.popularmovies.R;
-import com.android.test.popularmovies.Async.Result;
 import com.android.test.popularmovies.activities.ActivityDetail;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -69,6 +69,7 @@ public class FragmentDetail extends Fragment{
 			//Set image
 			mImage = (ImageView) getView().findViewById(R.id.fragment_detail_image);
 			String path = mAPi.getImgUrl(mMovie.posterPath, true);
+
 			//Callback to activity to give go ahead to load.
 			Picasso.with(getActivity()).load(path).into(mImage, new Callback() {
 				@Override

@@ -23,9 +23,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -33,8 +31,6 @@ import android.widget.LinearLayout;
 import com.android.test.popularmovies.R;
 
 public class ActivitySettings extends PreferenceActivity implements Preference.OnPreferenceChangeListener {
-
-	public static final String TAG_BROADCAST_SETTING_CHANGED = "tag_broadcast_setting_changed";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

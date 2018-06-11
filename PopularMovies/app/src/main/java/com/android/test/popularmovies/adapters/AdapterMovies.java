@@ -1,54 +1,69 @@
 package com.android.test.popularmovies.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
+import com.android.test.popularmovies.Async.Result;
 import com.android.test.popularmovies.MovieApi;
 import com.android.test.popularmovies.R;
-import com.android.test.popularmovies.Async.Result;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class AdapterMovies extends ArrayAdapter<Result>{
+public class AdapterMovies extends RecyclerView.Adapter<AdapterMovies.MovieViewHolder> {
 
-	LayoutInflater mInflater;
-	List<Result> mMovies;
-	Context mContext;
-	MovieApi mApi;
+    private List<Result> mMovies;
+    private Context mContext;
+    private MovieApi mApi;
+    private IMovieClickedListener listener;
 
-	public AdapterMovies(Context context, int resource, List<Result> movies) {
-		super(context, resource, movies);
-		mInflater = LayoutInflater.from(context);
-		mMovies = movies;
-		mContext = context;
-		mApi = new MovieApi(mContext);
-	}
+    public AdapterMovies(Context context, IMovieClickedListener listener, List<Result> movies) {
+        this.listener = listener;
+        mMovies = movies;
+        mContext = context;
+        mApi = new MovieApi(mContext);
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		ViewHolder viewHolder = new ViewHolder();
+    public interface IMovieClickedListener {
+        void onMovieClickedListener(Result movie, View view);
+    }
 
-		if(convertView == null) {
-			convertView = mInflater.inflate(R.layout.item_movie, null, false);
-			viewHolder.thumbImage = (ImageView) convertView;
-		} else {
-			viewHolder = (ViewHolder) convertView.getTag();
-		}
+    @NonNull
+    @Override
+    public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new MovieViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_movie, parent, false));
+    }
 
-		//Get image path and use picasso to load it.
-		String path = mApi.getImgUrl(mMovies.get(position).posterPath, false);
-		Picasso.with(mContext).load(path).into(viewHolder.thumbImage);
+    @Override
+    public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
+        String path = mApi.getImgUrl(mMovies.get(position).posterPath, false);
+        Picasso.with(mContext).load(path).into(holder.movieImageView);
+    }
 
-		convertView.setTag(viewHolder);
-		return convertView;
-	}
+    @Override
+    public int getItemCount() {
+        return mMovies.size();
+    }
 
-	public class ViewHolder {
-		ImageView thumbImage;
-	}
+    public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        ImageView movieImageView;
+
+        MovieViewHolder(View itemView) {
+            super(itemView);
+            movieImageView = itemView.findViewById(R.id.item_movie_image);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (listener != null) {
+                listener.onMovieClickedListener(mMovies.get(getAdapterPosition()), view);
+            }
+        }
+    }
 }

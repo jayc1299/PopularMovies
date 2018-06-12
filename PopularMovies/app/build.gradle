@@ -10,6 +10,12 @@ android {
 		targetSdkVersion 27
 		versionCode 1
 		versionName "1.0"
+
+		buildConfigField("String", "API_KEY", "\"${apikey}\"")
+		buildConfigField("String", "MAIN_URL", "\"${apimainurl}\"")
+		buildConfigField("String", "IMG_URL", "\"${imgurl}\"")
+		buildConfigField("String", "API_PATH_POPULAR", "\"${apiPathPopular}\"")
+		buildConfigField("String", "API_PATH_TOP_RATED", "\"${apiPathTopRated}\"")
 	}
 	buildTypes {
 		release {
@@ -17,6 +23,10 @@ android {
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 		}
 	}
+
+    lintOptions{
+        abortOnError false
+    }
 }
 
 dependencies {

@@ -7,11 +7,14 @@
 
 	<string name="pref_sort_key">sort_order</string>
 	<string name="pref_sort_label">Sort Order</string>
-	<string name="pref_sort_default">popularity.desc</string>
+	<string name="pref_sort_default">@string/preferences_key_popularity</string>
 
 	<string name="fragment_detail_title">Title</string>
 	<string name="fragment_detail_release_date">Release Date</string>
 	<string name="fragment_detail_rating">Rating</string>
 	<string name="fragment_detail_image_alt">Movie Poster</string>
+
+	<string name="preferences_key_popularity">popularity.desc</string>
+	<string name="preferences_key_top_rated">vote_average.desc</string>
 
 </resources>
